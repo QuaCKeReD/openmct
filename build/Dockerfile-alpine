@@ -1,0 +1,24 @@
+FROM node:14.19.0-alpine
+
+ENV HOME /opt/openmct
+
+RUN apk add --no-cache git curl
+
+COPY ./ ${HOME}
+# WORKDIR /opt
+# RUN git clone https://github.com/nasa/openmct.git \
+#   && cd openmct
+
+WORKDIR ${HOME}
+
+ENV NPM_CONFIG_LOGLEVEL info
+RUN npm install
+# RUN npm install appdynamics@next
+
+EXPOSE 8080
+
+ENTRYPOINT ["npm", "start", "--", "--host", "0.0.0.0"]
+
+
+# docker build . -f ./build/Dockerfile-alpine -t quackered/openmct-docker:alpine --label VER=2.0.1-SNAPSHOT
+# docker push quackered/openmct-docker:alpine
